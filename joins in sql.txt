@@ -1,0 +1,175 @@
+Enter password: ********
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 10
+Server version: 8.0.39 MySQL Community Server - GPL
+
+Copyright (c) 2000, 2024, Oracle and/or its affiliates.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+mysql> use mydb;
+Database changed
+mysql> delimiter $$
+mysql> create table employees(
+    -> empid int,
+    -> name varchar(100),
+    -> deptid int
+    -> );
+    -> $$
+Query OK, 0 rows affected (0.06 sec)
+
+mysql> create table departments(
+    -> deptid int,
+    -> deptname varchar(100)
+    -> );
+    -> $$
+Query OK, 0 rows affected (0.07 sec)
+
+mysql> INSERT INTO Employees (empid, name, deptid) VALUES
+    -> (1, 'Alice', 101),
+    -> (2, 'Bob', 102),
+    -> (3, 'Charlie', NULL);
+    -> $$
+Query OK, 3 rows affected (0.02 sec)
+Records: 3  Duplicates: 0  Warnings: 0
+
+mysql> INSERT INTO departments (deptid, deptname) VALUES
+    -> (101, 'HR'),
+    -> (102, 'Finance'),
+    -> (103, 'IT');
+    -> $$
+Query OK, 3 rows affected (0.02 sec)
+Records: 3  Duplicates: 0  Warnings: 0
+
+mysql> select * from employees;
+    -> $$
++-------+---------+--------+
+| empid | name    | deptid |
++-------+---------+--------+
+|     1 | Alice   |    101 |
+|     2 | Bob     |    102 |
+|     3 | Charlie |   NULL |
++-------+---------+--------+
+3 rows in set (0.00 sec)
+
+mysql> select * from departments;
+    -> $$
++--------+----------+
+| deptid | deptname |
++--------+----------+
+|    101 | HR       |
+|    102 | Finance  |
+|    103 | IT       |
++--------+----------+
+3 rows in set (0.00 sec)
+
+mysql> SELECT Employees.Name, Departments.DepartmentName
+    -> FROM Employees
+    -> INNER JOIN Departments ON Employees.DepartmentID = Departments.DepartmentID;
+    -> INNER JOIN Departments ON Employees.DepartmentID = Departments.DepartmentID;^C
+mysql> SELECT Employees.Name, Departments.Deptname
+    -> from employees
+    -> inner join
+    -> departments on employees.deptid=departments.deptid;
+    -> $$
++-------+----------+
+| Name  | Deptname |
++-------+----------+
+| Alice | HR       |
+| Bob   | Finance  |
++-------+----------+
+2 rows in set (0.00 sec)
+
+mysql> SELECT Employees.Name, Departments.DeptName
+    -> from employees
+    -> LEFT JOIN Departments ON Employees.DeptID = Departments.DeptID;
+    -> $$
++---------+----------+
+| Name    | DeptName |
++---------+----------+
+| Alice   | HR       |
+| Bob     | Finance  |
+| Charlie | NULL     |
++---------+----------+
+3 rows in set (0.00 sec)
+
+mysql> SELECT *
+    -> from employees
+    -> LEFT JOIN Departments ON Employees.DeptID = Departments.DeptID;
+    -> $$
++-------+---------+--------+--------+----------+
+| empid | name    | deptid | deptid | deptname |
++-------+---------+--------+--------+----------+
+|     1 | Alice   |    101 |    101 | HR       |
+|     2 | Bob     |    102 |    102 | Finance  |
+|     3 | Charlie |   NULL |   NULL | NULL     |
++-------+---------+--------+--------+----------+
+3 rows in set (0.00 sec)
+
+mysql> SELECT Employees.Name, Departments.DeptName
+    -> from employees
+    -> RIGHT JOIN Departments ON Employees.DeptID = Departments.DeptID;
+    -> $$
++-------+----------+
+| Name  | DeptName |
++-------+----------+
+| Alice | HR       |
+| Bob   | Finance  |
+| NULL  | IT       |
++-------+----------+
+3 rows in set (0.00 sec)
+
+mysql> SELECT *
+    -> from employees
+    -> RIGHT JOIN Departments ON Employees.DeptID = Departments.DeptID;
+    -> $$
++-------+-------+--------+--------+----------+
+| empid | name  | deptid | deptid | deptname |
++-------+-------+--------+--------+----------+
+|     1 | Alice |    101 |    101 | HR       |
+|     2 | Bob   |    102 |    102 | Finance  |
+|  NULL | NULL  |   NULL |    103 | IT       |
++-------+-------+--------+--------+----------+
+3 rows in set (0.00 sec)
+
+mysql> SELECT Employees.Name, Departments.DeptName
+    -> from employees
+    -> cross join departments;
+    -> $$
++---------+----------+
+| Name    | DeptName |
++---------+----------+
+| Charlie | HR       |
+| Bob     | HR       |
+| Alice   | HR       |
+| Charlie | Finance  |
+| Bob     | Finance  |
+| Alice   | Finance  |
+| Charlie | IT       |
+| Bob     | IT       |
+| Alice   | IT       |
++---------+----------+
+9 rows in set (0.00 sec)
+
+mysql> select * from employees cross join departments;
+    -> $$
++-------+---------+--------+--------+----------+
+| empid | name    | deptid | deptid | deptname |
++-------+---------+--------+--------+----------+
+|     3 | Charlie |   NULL |    101 | HR       |
+|     2 | Bob     |    102 |    101 | HR       |
+|     1 | Alice   |    101 |    101 | HR       |
+|     3 | Charlie |   NULL |    102 | Finance  |
+|     2 | Bob     |    102 |    102 | Finance  |
+|     1 | Alice   |    101 |    102 | Finance  |
+|     3 | Charlie |   NULL |    103 | IT       |
+|     2 | Bob     |    102 |    103 | IT       |
+|     1 | Alice   |    101 |    103 | IT       |
++-------+---------+--------+--------+----------+
+9 rows in set (0.00 sec)
+
+mysql>
